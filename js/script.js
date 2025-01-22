@@ -7,6 +7,9 @@ const widr=2
 const heir=1
 let ballX=wid/2
 let ballY=hei-70
+let dx = 2; // Horizontal speed of the ball
+let dy = -2; // Vertical speed of the ball
+
 
 
 
@@ -24,6 +27,7 @@ const radius = 20;   // Radius of the circle
 // THE UPPER YELLOW BALLS 
 
 
+
 for (let j = 0; j < 6; j++) { // Loop for rows
   const ballsInRow = 11 - j; // Decrease the number of balls in each row
   const startX = 140 + j * radius; // Offset to center the row
@@ -31,7 +35,7 @@ for (let j = 0; j < 6; j++) { // Loop for rows
   for (let i = 0; i < ballsInRow; i++) { // Loop for balls in the current row
     const x = startX + i * (2 * radius); // Calculate the x-coordinate
     const y = 50 + j * (2 * radius); // Calculate the y-coordinate for each row
-
+functio yellowball{
     // Draw the circle
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2); // Draw a full circle
@@ -40,6 +44,7 @@ for (let j = 0; j < 6; j++) { // Loop for rows
     ctx.strokeStyle = "black"; // Set the border color
     ctx.stroke(); // Draw the border
   }
+}
 }
 
 
@@ -70,6 +75,29 @@ function rect(){
   ctx.clearRect(0,0,100,30)
 
 }
+
+
+// MOVING THE BALL
+function moveBall() {
+  ballX += dx;
+  ballY += dy;
+}
+// Ball collision with walls
+if (ballX - radius < 0 || ballX + radius > wid) dx = -dx; // Left or right wall
+if (ballY - radius < 0) dy = -dy; // Top wall
+
+
+
+// Ball collision with the lower rect
+  if (
+    ballY + radius > hei - 50 &&
+    ballX > wid/2-radius*2-10 &&
+    ballX < wid/2-radius*2-10 + 100
+  ) {
+    dy = -dy;
+  }
+
+
 
 
 
