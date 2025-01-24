@@ -25,8 +25,8 @@ const radius = 20;   // Radius of the circle
 
 
 // THE UPPER YELLOW BALLS 
-
-
+// Store yellow ball positions
+const yellowBalls = []; // Array to store positions of yellow balls
 
 for (let j = 0; j < 6; j++) { // Loop for rows
   const ballsInRow = 11 - j; // Decrease the number of balls in each row
@@ -35,67 +35,83 @@ for (let j = 0; j < 6; j++) { // Loop for rows
   for (let i = 0; i < ballsInRow; i++) { // Loop for balls in the current row
     const x = startX + i * (2 * radius); // Calculate the x-coordinate
     const y = 50 + j * (2 * radius); // Calculate the y-coordinate for each row
-functio yellowball{
-    // Draw the circle
+    yellowBalls.push({ x, y }); // Add yellow ball position to the array
+  }
+}
+
+// Function to draw all yellow balls
+function drawYellowBalls() {
+  yellowBalls.forEach(({ x, y }) => {
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2); // Draw a full circle
     ctx.fillStyle = "yellow"; // Set the fill color
     ctx.fill(); // Fill the circle
     ctx.strokeStyle = "black"; // Set the border color
     ctx.stroke(); // Draw the border
+  });
+}
+
+// Detect collision between blue ball and yellow balls
+function checkCollision() {
+  for (let i = 0; i < yellowBalls.length; i++) {
+    const yellowBall = yellowBalls[i];
+    const distX = ballX - yellowBall.x;
+    const distY = ballY - yellowBall.y;
+    const distance = Math.sqrt(distX * distX + distY * distY);
+
+    // Check if the distance is less than the sum of the radii
+    if (distance <= radius * 2) {
+      yellowBalls.splice(i, 1); // Remove the yellow ball
+      dy = -dy; // Reverse the direction of the blue ball
+      break;
+    }
   }
 }
-}
 
+// Main game loop
+function gameLoop() {
+  ctx.clearRect(0, 0, wid, hei); // Clear the canvas
 
+  // Draw yellow balls
+  drawYellowBalls();
 
+  // Draw the blue ball
+  ctx.beginPath();
+  ctx.arc(ballX, ballY, radius, 0, Math.PI * 2); // Draw a full circle
+  ctx.fillStyle = "blue"; // Set the fill color
+  ctx.fill(); // Fill the circle
+  ctx.strokeStyle = "black"; // Set the border color
+  ctx.stroke();
 
-// THE BLUE BALL TO HIT THE YELLOW BALLS
+  // Draw the green rectangle
+  ctx.fillStyle = "green";
+  ctx.fillRect(wid / 2 - radius * 2 - 10, hei - 50, 100, 30);
 
-ctx.beginPath();
-ctx.arc(ballX, ballY, radius, 0, Math.PI * 2); // Draw a full circle
-ctx.fillStyle = "blue"; // Set the fill color
-ctx.fill();             // Fill the circle
-ctx.strokeStyle = "black"; // Set the border color
-ctx.stroke();
+  // Move the ball
+  moveBall();
 
+  // Check for collisions
+  checkCollision();
 
-//THE FLOATING GREEN RECTANGLE TO BOUNCE THE BLUE BALL
+  // Ball collision with walls
+  if (ballX - radius < 0 || ballX + radius > wid) dx = -dx; // Left or right wall
+  if (ballY - radius < 0) dy = -dy; // Top wall
 
-ctx.fillStyle = "green"; // Fixed case
-ctx.fillRect(wid/2-radius*2-10, hei-50, 100,30);
-
-
-
-// THE MOVMENT OF THE BALL
-let d="up"
-// The movemet of the rectangle
-
-function rect(){
-  ctx.clearRect(0,0,100,30)
-
-}
-
-
-// MOVING THE BALL
-function moveBall() {
-  ballX += dx;
-  ballY += dy;
-}
-// Ball collision with walls
-if (ballX - radius < 0 || ballX + radius > wid) dx = -dx; // Left or right wall
-if (ballY - radius < 0) dy = -dy; // Top wall
-
-
-
-// Ball collision with the lower rect
+  // Ball collision with the lower rectangle
   if (
     ballY + radius > hei - 50 &&
-    ballX > wid/2-radius*2-10 &&
-    ballX < wid/2-radius*2-10 + 100
+    ballX > wid / 2 - radius * 2 - 10 &&
+    ballX < wid / 2 - radius * 2 - 10 + 100
   ) {
     dy = -dy;
   }
+
+  requestAnimationFrame(gameLoop); // Loop the game
+}
+
+// Start the game
+gameLoop();
+
 
 
 
@@ -192,6 +208,8 @@ if (ballY - radius < 0) dy = -dy; // Top wall
 //       }
 //     }
 //   });
+
+
 
 //   // Game over if the ball falls below the paddle
 //   if (ballY - radius > hei) {
