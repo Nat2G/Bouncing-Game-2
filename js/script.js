@@ -113,6 +113,12 @@ function gameLoop() {
 gameLoop();
 
 
+if(ballY + radius>=hei){
+  alert("Game over")
+}
+
+
+
 
 
 
