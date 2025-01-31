@@ -76,12 +76,14 @@ function gameLoop() {
   drawYellowBalls();
 
   // Draw the blue ball
+  function drawBlueBall(){
   ctx.beginPath();
   ctx.arc(ballX, ballY, radius, 0, Math.PI * 2); // Draw a full circle
   ctx.fillStyle = "blue"; // Set the fill color
   ctx.fill(); // Fill the circle
   ctx.strokeStyle = "black"; // Set the border color
   ctx.stroke();
+}
 
   // Draw the green rectangle
   ctx.fillStyle = "green";
@@ -113,9 +115,16 @@ function gameLoop() {
 gameLoop();
 
 
-if(ballY + radius>=hei){
+if(ballY - radius>hei){
   alert("Game over")
 }
+
+
+//Blue ball collosion with each Yellow balls
+
+
+
+
 
 
 
